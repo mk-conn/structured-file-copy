@@ -61,6 +61,8 @@ Options:
 
 ## TBD
 
+* Add a dry run
+* Omit log at the end if not wanted 
 * Sort into date:day folders
 * Sort into folders by filename (with user defined number of leading letters)
 * Write tests
