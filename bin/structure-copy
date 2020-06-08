@@ -1,0 +1,22 @@
+#!/usr/bin/env php
+<?php
+
+use MkConn\StructuredFileCopy\FileCopy;
+use Symfony\Component\Console\Application;
+
+if (file_exists(__DIR__.'/../../../autoload.php')) {
+    require __DIR__.'/../../../autoload.php';
+} else {
+    require __DIR__.'/../vendor/autoload.php';
+}
+
+require __DIR__.'/../helpers/helper.php';
+
+$application = new Application();
+$application->add(new FileCopy());
+
+try {
+    $application->run();
+} catch (Exception $e) {
+    print $e->getMessage().PHP_EOL;
+}
