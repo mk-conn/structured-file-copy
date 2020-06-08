@@ -14,6 +14,11 @@ instead of `find -type | xargs... err what?.. err.. what was the next unix tool 
 
 `composer global require "mk-conn/structured-file-copy"`
 
+Or into a custom place of your choice:
+
+`git clone https://github.com/mk-conn/structured-file-copy.git`
+
+
 ### Usage
 
 Composer is in your global path? Great! Just run
