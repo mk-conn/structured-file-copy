@@ -23,14 +23,17 @@ Or into a custom place of your choice:
 
 Composer is in your global path? Great! Just run
 
-`structure-copy copy:struct --target=/target/folder [--file-type=<file-type1,n>] [--source=/source/path] [--file-ext=<ext1,n>] [--sort=date:year] [--sort=date:month]`
+```shell script
+structure-copy copy:struct --target=/target/folder [--file-type=<file-type1,n>] [--source=/source/path] [--file-ext=<ext1,n>] [--sort=date:year] [--sort=date:month]
+```
 
 Not?
-
-`~/.composer/vendor/bin/structure-copy copy:struct --target=/target/folder [--file-type=<file-type1,n>] [--source=/source/path] [--file-ext=<ext1,n>] [--sort=date:year] [--sort=date:month]`
+```shell script
+~/.composer/vendor/bin/structure-copy copy:struct --target=/target/folder [--file-type=<file-type1,n>] [--source=/source/path] [--file-ext=<ext1,n>] [--sort=date:year] [--sort=date:month]
+```
 
 Get help:
-```shell script
+```textmate
 $ structure-copy copy:struct --help
 Description:
   Copies files from a source folder to a target folder but in a sctructured way if you want.
@@ -44,7 +47,7 @@ Options:
       --sort[=SORT]                  Sort in folders by (date:day,date:month,date:year,alpha:name) (multiple values allowed)
       --name-letters[=NAME-LETTERS]  By how many (first) letters should the name sorted
       --exclude-ext[=EXCLUDE-EXT]    Exclude files with extensions (multiple values allowed)
-      --file-type[=FILE-TYPE]        Move only a file type (image, movies, docs, text (multiple values allowed)
+      --file-type[=FILE-TYPE]        Move only a file type [image, video, office, text, richtext, pdf] (multiple values allowed)
       --file-ext[=FILE-EXT]          Move only files with a specific extension (multiple values allowed)
   -h, --help                         Display this help message
   -q, --quiet                        Do not output any message
