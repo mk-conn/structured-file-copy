@@ -29,6 +29,33 @@ Not?
 
 `~/.composer/vendor/bin/structure-copy copy:struct --target=/target/folder [--file-type=<file-type1,n>] [--source=/source/path] [--file-ext=<ext1,n>] [--sort=date:year] [--sort=date:month]`
 
+Get help:
+```shell script
+$ structure-copy copy:struct --help
+Description:
+  Copies files from a source folder to a target folder but in a sctructured way if you want.
+
+Usage:
+  copy:struct [options]
+
+Options:
+      --source[=SOURCE]              The from folder (if not set, files are taken from the folder where the command is running)
+      --target=TARGET                Where to put the files
+      --sort[=SORT]                  Sort in folders by (date:day,date:month,date:year,alpha:name) (multiple values allowed)
+      --name-letters[=NAME-LETTERS]  By how many (first) letters should the name sorted
+      --exclude-ext[=EXCLUDE-EXT]    Exclude files with extensions (multiple values allowed)
+      --file-type[=FILE-TYPE]        Move only a file type (image, movies, docs, text (multiple values allowed)
+      --file-ext[=FILE-EXT]          Move only files with a specific extension (multiple values allowed)
+  -h, --help                         Display this help message
+  -q, --quiet                        Do not output any message
+  -V, --version                      Display this application version
+      --ansi                         Force ANSI output
+      --no-ansi                      Disable ANSI output
+  -n, --no-interaction               Do not ask any interactive question
+  -v|vv|vvv, --verbose               Increase the verbosity of messages: 1 for normal output, 2 for more verbose output and 3 for debug
+```
+
+
 ## TBD
 
 * Sort into date:day folders

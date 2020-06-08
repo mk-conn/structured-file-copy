@@ -24,11 +24,11 @@ class FileCopy extends Command
      */
     protected function configure()
     {
-        $this->setDescription('Moves files to a target');
+        $this->setDescription('Copies files from a source folder to a target folder but in a sctructured way if you want.');
         $this->addOption('source',
             null,
             InputOption::VALUE_OPTIONAL,
-            'The from folder (if not set, files are taken from the foler where the command is running)'
+            'The from folder (if not set, files are taken from the folder where the command is running)'
         );
         $this->addOption('target', null, InputOption::VALUE_REQUIRED, 'Where to put the files');
         $this->addOption('sort',
