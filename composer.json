@@ -3,7 +3,7 @@
   "description": "description",
   "minimum-stability": "stable",
   "license": "MIT",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "authors": [
     {
       "name": "Marko Krüger",
@@ -19,7 +19,7 @@
     }
   },
   "bin": [
-    "bin/file-copy"
+    "bin/structure-copy"
   ],
   "require": {
     "php": ">=7.3",
