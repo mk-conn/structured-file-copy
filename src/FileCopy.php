@@ -34,7 +34,7 @@ class FileCopy extends Command
         $this->addOption('sort',
             null,
             InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
-            'Sort in folders by (date:day,date:month,date:year,alpha:name)'
+            'Sort in folders by [date:day,date:month,date:year,alpha:name]'
         );
         $this->addOption('name-letters',
             null,
@@ -49,7 +49,7 @@ class FileCopy extends Command
         $this->addOption('file-type',
             null,
             InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
-            'Move only a file type (image, movies, docs, text'
+            'Move only a file type [image, video, office, text, richtext, pdf]'
         );
         $this->addOption('file-ext',
             null,
