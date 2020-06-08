@@ -1,6 +1,6 @@
 {
   "name": "mk-conn/structured-file-copy",
-  "description": "description",
+  "description": "A little cli helper to copy files from one source folder into a target folder structure",
   "minimum-stability": "stable",
   "license": "MIT",
   "version": "0.0.3",
