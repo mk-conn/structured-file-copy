@@ -14,7 +14,8 @@
       "src"
     ],
     "psr-4": {
-      "MkConn\\Sfc\\": "src"
+      "MkConn\\Sfc\\": "src",
+      "MkConn\\Sfc\\Tests\\": "tests"
     }
   },
   "bin": [

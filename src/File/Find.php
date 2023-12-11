@@ -8,6 +8,9 @@ use Symfony\Component\Mime\MimeTypes;
 
 class Find
 {
+    /**
+     * @var array<string, string[]>
+     */
     protected static array $typeMap = [
         'pdf'        => ['application/pdf'],
         'postscript' => ['application/postscript'],
@@ -77,13 +80,9 @@ class Find
             'video/quicktime',
             'video/x-flv',
         ]
-
     ];
     protected Finder $finder;
 
-    /**
-     * Find constructor.
-     */
     public function __construct(protected string $root, protected array $types = [], protected array $exts = [], protected array $exclude = [])
     {
         $this->finder = new Finder();
@@ -92,11 +91,9 @@ class Find
     }
 
     /**
-     * @param $type
-     *
-     * @return mixed|null
+     * @return string[]|null
      */
-    protected static function findMimeTypes($type): mixed
+    protected static function findMimeTypes(string $type): ?array
     {
         return self::$typeMap[$type] ?? null;
     }
