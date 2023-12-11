@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-use MkConn\StructuredFileCopy\FileCopy;
+use MkConn\Sfc\Commands\CopyCommand;
 use Symfony\Component\Console\Application;
 
 if (file_exists(__DIR__.'/../../../autoload.php')) {
@@ -13,7 +13,7 @@ if (file_exists(__DIR__.'/../../../autoload.php')) {
 require __DIR__.'/../helpers/helper.php';
 
 $application = new Application();
-$application->add(new FileCopy());
+$application->add(new CopyCommand());
 
 try {
     $application->run();

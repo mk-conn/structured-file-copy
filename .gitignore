@@ -153,7 +153,6 @@ flycheck_*.el
 **/nbproject/Package-*.bash
 build/
 nbbuild/
-dist/
 nbdist/
 .nb-gradle/
 
@@ -209,11 +208,6 @@ $RECYCLE.BIN/
 /app/config/parameters.yml
 /app/config/parameters.ini
 
-# Managed by Composer
-/app/bootstrap.php.cache
-/var/bootstrap.php.cache
-/vendor/
-
 # Assets and user uploads
 /web/bundles/
 /web/uploads/
@@ -235,4 +229,4 @@ $RECYCLE.BIN/
 /.web-server-pid
 
 .idea
-
+.php-cs-fixer.cache
