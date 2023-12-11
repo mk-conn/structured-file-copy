@@ -11,6 +11,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use function MkConn\Sfc\human_filesize;
 
 #[AsCommand(name: 'copy')]
 class CopyCommand extends Command
@@ -61,7 +62,10 @@ class CopyCommand extends Command
     {
         date_default_timezone_set('Europe/Berlin');
         $source = $input->getOption('source') ?: getcwd();
+        $options['target'] = $input->getOption('target');
+
         $output->writeln("source: $source");
+        $output->writeln("target: {$options['target']}");
 
         $types = $input->getOption('file-type');
         $exts = $input->getOption('file-ext');
@@ -70,7 +74,6 @@ class CopyCommand extends Command
 
         $options['sort'] = $sort;
         $options['sort'][Storage::NAME_LETTERS] = $input->getOption('name-letters') ?: 1;
-        $options['target'] = $input->getOption('target');
 
         $output->writeln(
             sprintf(
@@ -99,9 +102,7 @@ class CopyCommand extends Command
                 $output->writeln($log['result']);
             }
 
-
             return Command::SUCCESS;
-
         } else {
             if ($storage->hasErrors()) {
                 $output->writeln(implode("\n", $storage->getErrors()));

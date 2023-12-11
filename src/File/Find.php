@@ -98,9 +98,6 @@ class Find
         return self::$typeMap[$type] ?? null;
     }
 
-    /**
-     *
-     */
     public function files(): Finder
     {
         return $this->finder->name($this->exts)

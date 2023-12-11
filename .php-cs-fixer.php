@@ -16,14 +16,16 @@ $rules = [
 ];
 
 $finder = Finder::create()
-    ->in(
-        [
-            __DIR__ . '/src'
-        ]
-    )
-    ->ignoreDotFiles(true)
-    ->name('*.php')
-    ->ignoreVCS(true);
+                ->in(
+                    [
+                        __DIR__ . '/src',
+                        __DIR__ . '/helpers',
+                        __DIR__ . '/tests'
+                    ]
+                )
+                ->ignoreDotFiles(true)
+                ->name('*.php')
+                ->ignoreVCS(true);
 
 return (new Config)
     ->setFinder($finder)
