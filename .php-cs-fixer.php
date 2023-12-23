@@ -9,6 +9,11 @@ $rules = [
     'array_syntax'                => ['syntax' => 'short'],
     'array_indentation'           => true,
     'blank_line_after_namespace'  => true,
+    'braces_position'             => [
+        'classes_opening_brace'   => 'same_line',
+        'functions_opening_brace' => 'same_line',
+
+    ],
     'blank_line_before_statement' => [
         'statements' => ['if', 'try', 'foreach', 'return', 'yield']
     ],
@@ -19,7 +24,7 @@ $finder = Finder::create()
                 ->in(
                     [
                         __DIR__ . '/src',
-                        __DIR__ . '/helpers',
+                        __DIR__ . '/bootstrap',
                         __DIR__ . '/tests'
                     ]
                 )

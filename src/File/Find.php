@@ -6,8 +6,7 @@ namespace MkConn\Sfc\File;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Mime\MimeTypes;
 
-class Find
-{
+class Find {
     /**
      * @var array<string, string[]>
      */
@@ -59,14 +58,12 @@ class Find
             'image/heic',
             'image/png',
             'image/svg+xml',
-            'image/tiff',
             'image/tiff'
         ],
         'message'    => ['message/rfc822'],
         'text'       => [
             'text/css',
             'text/csv',
-            'text/html',
             'text/html',
             'text/javascript',
             'text/plain',
@@ -83,8 +80,7 @@ class Find
     ];
     protected Finder $finder;
 
-    public function __construct(protected string $root, protected array $types = [], protected array $exts = [], protected array $exclude = [])
-    {
+    public function __construct(protected string $root, protected array $types = [], protected array $exts = [], protected array $exclude = []) {
         $this->finder = new Finder();
 
         $this->prepareExtensions();
@@ -93,23 +89,17 @@ class Find
     /**
      * @return string[]|null
      */
-    protected static function findMimeTypes(string $type): ?array
-    {
+    protected static function findMimeTypes(string $type): ?array {
         return self::$typeMap[$type] ?? null;
     }
 
-    public function files(): Finder
-    {
+    public function files(): Finder {
         return $this->finder->name($this->exts)
                             ->files()
                             ->in($this->root);
     }
 
-    /**
-     *
-     */
-    protected function prepareExtensions(): void
-    {
+    protected function prepareExtensions(): void {
         if ($this->exts === [] && $this->types === []) {
             return;
         }

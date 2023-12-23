@@ -14,10 +14,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use function MkConn\Sfc\human_filesize;
 
 #[AsCommand(name: 'copy')]
-class CopyCommand extends Command
-{
-    protected function configure(): void
-    {
+class CopyCommand extends Command {
+    protected function configure(): void {
         $this->setDescription('Copies files from a source folder to a target folder but in a sctructured way if you want.');
         $this->addOption(
             'source',
@@ -58,9 +56,7 @@ class CopyCommand extends Command
         );
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
-    {
-        date_default_timezone_set('Europe/Berlin');
+    protected function execute(InputInterface $input, OutputInterface $output): int {
         $source = $input->getOption('source') ?: getcwd();
         $options['target'] = $input->getOption('target');
 

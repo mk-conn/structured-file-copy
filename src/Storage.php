@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types=1);
 
 namespace MkConn\Sfc;
 
@@ -9,8 +9,7 @@ use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
-class Storage
-{
+class Storage {
 
     final public const DATE_YEAR = 'date:month';
 
@@ -38,8 +37,7 @@ class Storage
     protected ProgressBar $progressBar;
     protected int $filesToCopy = 0;
 
-    public function __construct(protected array $files, array $options, protected OutputInterface $output)
-    {
+    public function __construct(protected array $files, array $options, protected OutputInterface $output) {
         $this->filesToCopy = count($this->files);
         $this->filesystem = new Filesystem();
 
@@ -47,43 +45,36 @@ class Storage
         $this->prepareFiles();
     }
 
-    public function copy(): bool
-    {
+    public function copy(): bool {
         $this->progressBar = new ProgressBar($this->output, $this->filesToCopy);
         $this->progressBar->start();
 
         try {
             $targetFolder = $this->target;
 
-            if ($this->sortInYear) {
-                foreach ($this->files as $year => $filesPerYear) {
-                    if (!$this->filesystem->exists($this->target . '/' . $year)) {
-
-                        $this->filesystem->mkdir($targetFolder);
-                    }
-                    $targetFolder = $this->target . '/' . $year;
-
-                    if ($this->sortInMonths) {
-                        foreach ($filesPerYear as $month => $filesPerMonth) {
-                            $targetFolder = $this->target . '/' . $year . '/' . $month;
-
-                            if (!$this->filesystem->exists($targetFolder)) {
-                                $this->filesystem->mkdir($targetFolder);
-                            }
-
-                            foreach ($filesPerMonth as $filePerMonthName => $file) {
-                                $this->copyFile($filePerMonthName, $targetFolder, $file);
-                            }
-                        }
-                    } else {
-                        foreach ($filesPerYear as $filePerYearName => $file) {
-                            $this->copyFile($filePerYearName, $targetFolder, $file);
-                        }
-                    }
+            foreach ($this->files as $year => $filesPerYear) {
+                if ($this->sortInYear && !$this->filesystem->exists($this->target . '/' . $year)) {
+                    $this->filesystem->mkdir($targetFolder);
                 }
-            } else {
-                foreach ($this->files as $fileName => $file) {
-                    $this->copyFile($fileName, $targetFolder, $file);
+
+                $targetFolder = $this->target . '/' . $year;
+
+                if ($this->sortInMonths) {
+                    foreach ($filesPerYear as $month => $filesPerMonth) {
+                        $subTargetFolder = $targetFolder . '/' . $month;
+
+                        if (!$this->filesystem->exists($subTargetFolder)) {
+                            $this->filesystem->mkdir($subTargetFolder);
+                        }
+
+                        foreach ($filesPerMonth as $filePerMonthName => $file) {
+                            $this->copyFile($filePerMonthName, $subTargetFolder, $file);
+                        }
+                    }
+                } else {
+                    foreach ($filesPerYear as $filePerYearName => $file) {
+                        $this->copyFile($filePerYearName, $targetFolder, $file);
+                    }
                 }
             }
 
@@ -95,34 +86,28 @@ class Storage
         }
     }
 
-    public function hasErrors(): bool
-    {
+    public function hasErrors(): bool {
         return $this->errors !== [];
     }
 
-    public function getErrors(): array
-    {
+    public function getErrors(): array {
         return $this->errors;
     }
 
 
-    public function getTotalFiles(): int
-    {
+    public function getTotalFiles(): int {
         return $this->totalFiles;
     }
 
-    public function getTotalFileSize(): int
-    {
+    public function getTotalFileSize(): int {
         return $this->totalFileSize;
     }
 
-    public function getCopiedFiles(): array
-    {
+    public function getCopiedFiles(): array {
         return $this->copiedFiles;
     }
 
-    protected function copyFile(string $from, string $to, SplFileInfo $file, bool $preserveTime = true): void
-    {
+    protected function copyFile(string $from, string $to, SplFileInfo $file, bool $preserveTime = true): void {
         $this->copiedFiles[$from] = [
             'to'     => $to . '/' . $file->getFilename(),
             'result' => null
@@ -152,8 +137,7 @@ class Storage
         $this->progressBar->advance();
     }
 
-    protected function setOptions(array $options): void
-    {
+    protected function setOptions(array $options): void {
         $this->target = $options['target'];
 
         if (in_array(self::DATE_YEAR, $options['sort'])) {
@@ -177,8 +161,7 @@ class Storage
         }
     }
 
-    protected function byYear($files): array
-    {
+    protected function byYear($files): array {
         $return = [];
 
         foreach ($files as $fileName => $file) {
@@ -188,8 +171,7 @@ class Storage
         return $return;
     }
 
-    protected function byMonth(array $files): array
-    {
+    protected function byMonth(array $files): array {
         $return = [];
 
         foreach ($files as $fileName => $file) {
@@ -199,18 +181,15 @@ class Storage
         return $return;
     }
 
-    protected function byDay($files)
-    {
+    protected function byDay($files) {
 
     }
 
-    protected function byName($files, $countLetters = 1)
-    {
+    protected function byName($files, $countLetters = 1) {
 
     }
 
-    protected function prepareFiles(): void
-    {
+    protected function prepareFiles(): void {
         $files = [];
 
         if ($this->sortInYear) {
