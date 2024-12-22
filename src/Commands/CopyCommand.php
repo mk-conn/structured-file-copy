@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace MkConn\Sfc\Commands;
 
+use League\Flysystem\Filesystem;
 use MkConn\Sfc\File\Find;
 use MkConn\Sfc\Storage;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -11,12 +12,17 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use function MkConn\Sfc\human_filesize;
+
+use function MkConn\Sfc\humanFilesize;
 
 #[AsCommand(name: 'copy')]
 class CopyCommand extends Command {
+    public function __construct(private readonly Filesystem $filesystem) {
+        parent::__construct();
+    }
+
     protected function configure(): void {
-        $this->setDescription('Copies files from a source folder to a target folder but in a sctructured way if you want.');
+        $this->setDescription('Copies files from a source folder to a target folder but in a sctructured way (if you want)');
         $this->addOption(
             'source',
             null,
@@ -88,8 +94,8 @@ class CopyCommand extends Command {
         $storage = new Storage(iterator_to_array($files), $options, $output);
 
         if ($storage->copy()) {
-            $fileSize = human_filesize($storage->getTotalFileSize());
-            $output->writeln("");
+            $fileSize = humanFilesize($storage->getTotalFileSize());
+            $output->writeln('');
             $output->writeln("Copied {$storage->getTotalFiles()} of {$files->count()} files ({$fileSize})");
             $output->writeln('Here is the log:');
 
@@ -107,5 +113,4 @@ class CopyCommand extends Command {
             return Command::FAILURE;
         }
     }
-
 }

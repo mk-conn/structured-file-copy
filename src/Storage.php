@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace MkConn\Sfc;
@@ -10,7 +11,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
 class Storage {
-
     final public const DATE_YEAR = 'date:month';
 
     final public const DATE_MONTH = 'date:month';
@@ -87,13 +87,12 @@ class Storage {
     }
 
     public function hasErrors(): bool {
-        return $this->errors !== [];
+        return [] !== $this->errors;
     }
 
     public function getErrors(): array {
         return $this->errors;
     }
-
 
     public function getTotalFiles(): int {
         return $this->totalFiles;
@@ -110,7 +109,7 @@ class Storage {
     protected function copyFile(string $from, string $to, SplFileInfo $file, bool $preserveTime = true): void {
         $this->copiedFiles[$from] = [
             'to'     => $to . '/' . $file->getFilename(),
-            'result' => null
+            'result' => null,
         ];
 
         try {
@@ -129,7 +128,7 @@ class Storage {
                 );
             }
             $this->totalFileSize += $file->getSize();
-            $this->totalFiles++;
+            ++$this->totalFiles;
             $this->copiedFiles[$from]['result'] = "<comment>Copied {$to}/{$file->getFilename()}</comment>";
         } catch (Exception $e) {
             $this->errors[$file->getFilename()] = $e->getMessage();
@@ -161,7 +160,7 @@ class Storage {
         }
     }
 
-    protected function byYear($files): array {
+    protected function byYear(array $files): array {
         $return = [];
 
         foreach ($files as $fileName => $file) {
@@ -181,13 +180,9 @@ class Storage {
         return $return;
     }
 
-    protected function byDay($files) {
+    protected function byDay($files): void {}
 
-    }
-
-    protected function byName($files, $countLetters = 1) {
-
-    }
+    protected function byName($files, $countLetters = 1): void {}
 
     protected function prepareFiles(): void {
         $files = [];
@@ -206,9 +201,8 @@ class Storage {
             }
         }
 
-        if ($files !== []) {
+        if ([] !== $files) {
             $this->files = $files;
         }
-
     }
 }

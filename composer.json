@@ -1,8 +1,8 @@
 {
   "name": "mk-conn/structured-file-copy",
-  "description": "A little cli helper to copy files from one source folder into a target folder structure",
+  "description": "A cli helper package to copy files from one source folder into a target folder in structured way.",
   "license": "MIT",
-  "version": "0.0.8",
+  "version": "1.0.0",
   "authors": [
     {
       "name": "Marko Krüger",
@@ -12,6 +12,9 @@
   "autoload": {
     "classmap": [
       "src"
+    ],
+    "files": [
+      "bootstrap/helper.php"
     ],
     "psr-4": {
       "MkConn\\Sfc\\": "src",
@@ -23,15 +26,18 @@
   ],
   "require": {
     "php": ">=8.2",
-    "symfony/console": "^6.4|^7.0",
-    "symfony/filesystem": "^6.4|^7.0",
-    "symfony/finder": "^6.4|^7.0",
-    "symfony/mime": "^6.4|^7.0"
+    "symfony/console": "^7.0",
+    "symfony/filesystem": "^7.0",
+    "symfony/finder": "^7.0",
+    "symfony/mime": "^7.0",
+    "php-di/php-di": "^7.0",
+    "illuminate/collections": "^11.35"
   },
   "require-dev": {
     "friendsofphp/php-cs-fixer": "^3.41",
-    "phpunit/phpunit": "^10.5",
+    "phpunit/phpunit": "^11.0",
     "mikey179/vfsstream": "^1.6",
-    "rector/rector": "^0.18.12"
+    "rector/rector": "^0.18.12",
+    "phpstan/phpstan": "^1.12"
   }
 }

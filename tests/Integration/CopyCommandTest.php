@@ -1,26 +1,27 @@
 <?php
+
 declare(strict_types=1);
 
-namespace MkConn\Sfc\Tests\integration;
+namespace MkConn\Sfc\Tests\Integration;
 
 use MkConn\Sfc\Commands\CopyCommand;
+use MkConn\Sfc\Tests\SfcTestCase;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
-final class CopyCommandTest extends TestCase {
-
+final class CopyCommandTest extends SfcTestCase {
     private vfsStreamDirectory $root;
 
     protected function setUp(): void {
         $this->root = vfsStream::setup();
     }
 
-    public function testCopyCommand() {
+    public function testCopyCommand(): void {
         $this->root->addChild(new vfsStreamDirectory('sourceFolder'));
         $url = $this->root->url();
-        $copyCommand = new CopyCommand();
+        $copyCommand = $this->container()->get(CopyCommand::class);
+
         $tester = new CommandTester($copyCommand);
         $tester->execute(
             [

@@ -2,19 +2,13 @@
 
 declare(strict_types=1);
 
-namespace MkConn\Sfc\File;
+namespace MkConn\Sfc\Services\FileService;
 
-use Symfony\Component\Finder\Finder;
-use Symfony\Component\Mime\MimeTypes;
-
-/** @deprecated  */
-class Find {
+class FileTypes {
     /**
-     * @deprecated
-     *
      * @var array<string, string[]>
      */
-    protected static array $typeMap = [
+    public static array $typeMap = [
         'pdf'        => ['application/pdf'],
         'postscript' => ['application/postscript'],
         'richtext'   => ['application/rtf'],
@@ -82,59 +76,4 @@ class Find {
             'video/x-flv',
         ],
     ];
-    protected Finder $finder;
-
-    public function __construct(protected string $root, protected array $types = [], protected array $exts = [], protected array $exclude = []) {
-        $this->finder = new Finder();
-
-        $this->prepareExtensions();
-    }
-
-    /**
-     * @return string[]|null
-     */
-    protected static function findMimeTypes(string $type): ?array {
-        return self::$typeMap[$type] ?? null;
-    }
-
-    public function files(): Finder {
-        return $this->finder->name($this->exts)
-                            ->files()
-                            ->in($this->root);
-    }
-
-    protected function prepareExtensions(): void {
-        if ([] === $this->exts && [] === $this->types) {
-            return;
-        }
-
-        if ([] !== $this->types) {
-            $mimeTypes = new MimeTypes();
-            $exts = [];
-            $types = [];
-
-            foreach ($this->types as $type) {
-                if (!str_contains((string) $type, '/')) {
-                    $typesFromMap = self::findMimeTypes($type);
-
-                    if ($typesFromMap) {
-                        $types = $typesFromMap;
-                    }
-                } else {
-                    $types = [$type];
-                }
-
-                foreach ($types as $fileType) {
-                    $exts = array_merge($exts, $mimeTypes->getExtensions($fileType));
-                }
-            }
-
-            $this->exts = array_merge($this->exts, $exts);
-            $this->exts = array_diff($this->exts, $this->exclude);
-        }
-
-        array_walk($this->exts, function (&$ext): void {
-            $ext = "/\\.$ext/i";
-        });
-    }
 }
