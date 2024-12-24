@@ -14,9 +14,12 @@ class StrategyPipeline {
      */
     private array $strategyPipe = [];
 
-    public function __construct(private readonly StrategyCollection $strategyCollection) {}
+    public function __construct(private readonly AvailableStrategies $strategyCollection) {}
 
-    public function add(CopyStrategyInterface $strategy): static {
+    /**
+     * @param array<string, mixed> ...$args
+     */
+    public function add(CopyStrategyInterface $strategy, array ...$args): static {
         $this->strategyPipe[] = $this->strategyCollection->getStrategies()->get($strategy);
 
         return $this;

@@ -7,12 +7,12 @@ namespace MkConn\Sfc\Tests\Unit\Strategies\Copy;
 use ArrayIterator;
 use MkConn\Sfc\Models\CopyFile;
 use MkConn\Sfc\Strategies\Copy\DateStrategy\YearStrategy;
-use MkConn\Sfc\Tests\SfcTestCase;
 use PHPUnit\Framework\MockObject\Exception;
+use PHPUnit\Framework\TestCase;
 use SplFileInfo;
 use Symfony\Component\Finder\Finder;
 
-class YearStrategyTest extends SfcTestCase {
+class YearStrategyTest extends TestCase {
     /**
      * @throws Exception
      */

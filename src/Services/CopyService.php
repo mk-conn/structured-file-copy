@@ -6,16 +6,16 @@ namespace MkConn\Sfc\Services;
 
 use MkConn\Sfc\Enums\BucketType;
 use MkConn\Sfc\Exceptions\FileCopyException;
-use MkConn\Sfc\Factories\BucketFactory;
 use MkConn\Sfc\Factories\FileFinderFactory;
 use MkConn\Sfc\Models\Options;
+use MkConn\Sfc\Strategies\StrategyPipeline;
 use Symfony\Component\Filesystem\Filesystem;
 
 class CopyService {
     public function __construct(
         private readonly Filesystem $filesystem,
         private readonly FileFinderFactory $fileFinderFactory,
-        private readonly BucketFactory $bucketFactory
+        private readonly StrategyPipeline $strategyPipeline,
     ) {}
 
     /**
@@ -44,8 +44,6 @@ class CopyService {
         //            $this->fillBuckets();
         //        });
     }
-
-    private function buildBucketList(): void {}
 
     private function fillBuckets(): void {
         // Fill buckets with files

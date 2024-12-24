@@ -8,7 +8,7 @@ use Illuminate\Support\Collection;
 use InvalidArgumentException;
 use MkConn\Sfc\Strategies\Copy\CopyStrategyInterface;
 
-readonly class StrategyCollection {
+readonly class AvailableStrategies {
     /**
      * @param Collection<array-key, CopyStrategyInterface> $strategies
      */
@@ -22,10 +22,10 @@ readonly class StrategyCollection {
     }
 
     public function strategy(string $strategy): CopyStrategyInterface {
-        if (!$this->strategies->has($strategy)) {
+        if (($strategy = $this->strategies->get($strategy)) === null) {
             throw new InvalidArgumentException("Strategy $strategy not found");
         }
 
-        return $this->strategies->get($strategy);
+        return $strategy;
     }
 }

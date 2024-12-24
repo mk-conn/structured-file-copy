@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace MkConn\Sfc\Strategies\Copy;
 
-use Symfony\Component\Finder\Finder;
+use SplFileInfo;
 
-class FileTypeStrategy implements CopyStrategyInterface {
-    public function collectFiles(Finder $files, string $sourcePath): void {}
+class FileTypeStrategy extends GroupStrategy {
+    public function getGroupKey(SplFileInfo $file): string {
+        return $file->getType();
+    }
 }
