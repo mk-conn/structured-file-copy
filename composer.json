@@ -17,8 +17,12 @@
       "bootstrap/helper.php"
     ],
     "psr-4": {
-      "MkConn\\Sfc\\": "src",
-      "MkConn\\Sfc\\Tests\\": "tests"
+      "MkConn\\Sfc\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
     }
   },
   "bin": [

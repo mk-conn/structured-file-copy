@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Unit\Strategies;
+namespace Tests\Unit\Strategies;
 
 use Illuminate\Support\Collection;
 use InvalidArgumentException;

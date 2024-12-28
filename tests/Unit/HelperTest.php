@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace MkConn\Sfc\Tests\Unit;
-
-use MkConn\Sfc\Tests\SfcTestCase;
+namespace Tests\Unit;
 
 use PHPUnit\Framework\Attributes\DataProvider;
+
+use Tests\SfcTestCase;
 
 use function MkConn\Sfc\humanFilesize;
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MkConn\Sfc\Tests\Unit;
+namespace Tests\Unit;
 
 use MkConn\Sfc\Enums\SortOption;
 use PHPUnit\Framework\Attributes\DataProvider;

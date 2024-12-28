@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MkConn\Sfc\Tests\Integration;
+namespace Tests\Integration;
 
 use MkConn\Sfc\Exceptions\FileCopyException;
 use MkConn\Sfc\Models\CopyOptions;
@@ -13,12 +13,12 @@ use MkConn\Sfc\Strategies\Copy\DateStrategy\MonthStrategy;
 use MkConn\Sfc\Strategies\Copy\DateStrategy\YearStrategy;
 use MkConn\Sfc\Strategies\Copy\DefaultCopyStrategy;
 use MkConn\Sfc\Strategies\Copy\FileTypeStrategy;
-use MkConn\Sfc\Tests\FileFixture;
-use MkConn\Sfc\Tests\SfcTestCase;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Finder\Finder;
+use Tests\FileFixture;
+use Tests\SfcTestCase;
 
 final class CopyServiceTest extends SfcTestCase {
     /**

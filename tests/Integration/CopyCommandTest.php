@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace MkConn\Sfc\Tests\Integration;
+namespace Tests\Integration;
 
 use MkConn\Sfc\Commands\CopyCommand;
-use MkConn\Sfc\Tests\SfcTestCase;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use Symfony\Component\Console\Tester\CommandTester;
+use Tests\SfcTestCase;
 
 final class CopyCommandTest extends SfcTestCase {
     private vfsStreamDirectory $root;

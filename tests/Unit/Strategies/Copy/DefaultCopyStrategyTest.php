@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MkConn\Sfc\Tests\Unit\Strategies\Copy;
+namespace Tests\Unit\Strategies\Copy;
 
 use ArrayIterator;
 use MkConn\Sfc\Models\CopyFile;

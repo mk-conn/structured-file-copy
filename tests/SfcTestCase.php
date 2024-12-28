@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MkConn\Sfc\Tests;
+namespace Tests;
 
 use DI\Container as DIContainer;
 use DI\DependencyException;

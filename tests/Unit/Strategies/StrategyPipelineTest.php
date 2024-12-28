@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace MkConn\Sfc\Tests\Unit\Strategies;
+namespace Tests\Unit\Strategies;
 
 use MkConn\Sfc\Strategies\Copy\CopyStrategyInterface;
 use MkConn\Sfc\Strategies\StrategyPipeline;
-use MkConn\Sfc\Tests\SfcTestCase;
 use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Component\Finder\Finder;
+use Tests\SfcTestCase;
 
 class StrategyPipelineTest extends SfcTestCase {
     /**

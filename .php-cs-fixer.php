@@ -68,6 +68,7 @@ $finder = Finder::create()
                         __DIR__ . '/src',
                         __DIR__ . '/bootstrap',
                         __DIR__ . '/tests',
+                        __DIR__ . '/bin',
                     ]
                 )
                 ->ignoreDotFiles(true)

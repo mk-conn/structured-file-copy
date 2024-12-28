@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace MkConn\Sfc\Tests;
+namespace Tests;
 
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
