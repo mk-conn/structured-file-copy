@@ -21,11 +21,11 @@ readonly class FileFinderFactory {
         $finder = (new Finder())->in($source);
 
         if (!empty($include)) {
-            $finder = $this->addFilter($finder, $include);
+            $finder = $this->addIncludes($finder, $include);
         }
 
         if (!empty($exclude)) {
-            $finder = $this->addExclude($finder, $exclude);
+            $finder = $this->addExcludes($finder, $exclude);
         }
 
         return $finder;
@@ -34,7 +34,7 @@ readonly class FileFinderFactory {
     /**
      * @param array<Filter> $filters
      */
-    private function addFilter(Finder $finder, array $filters): Finder {
+    private function addIncludes(Finder $finder, array $filters): Finder {
         foreach ($filters as $filter) {
             switch ($filter->filterType) {
                 case FilterType::EXT:
@@ -66,7 +66,7 @@ readonly class FileFinderFactory {
     /**
      * @param array<Filter> $exclude
      */
-    private function addExclude(Finder $finder, array $exclude): Finder {
+    private function addExcludes(Finder $finder, array $exclude): Finder {
         foreach ($exclude as $filter) {
             switch ($filter->filterType) {
                 case FilterType::EXT:

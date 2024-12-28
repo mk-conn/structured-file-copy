@@ -246,6 +246,37 @@ final class CopyServiceTest extends SfcTestCase {
         $this->assertDirectoryStructure($target, $expectedStructure);
     }
 
+    public function testCopyWithSpecificFileExtensions(): void {
+        [$source, $target] = $this->setupTestEnvironment();
+        $copyOptionsFactory = $this->fromContainer(CopyOptionsFactory::class);
+        $options = $copyOptionsFactory->create($source, $target, included: [new Filter(FilterType::EXT, 'txt')]);
+        $this->copyService()->copy($options, new NullOutput());
+
+        $expectedStructure = [
+            '01_file.txt',
+            'FILE_a.txt',
+            'file_B.txt',
+            'file_b.txt',
+            'z_ile_a_copy.txt',
+        ];
+
+        $this->assertDirectoryStructure($target, $expectedStructure);
+    }
+
+    public function testCopyWithSpecificFileTypeAndExcludedExtensions(): void {
+        [$source, $target] = $this->setupTestEnvironment();
+        $copyOptionsFactory = $this->fromContainer(CopyOptionsFactory::class);
+        $options = $copyOptionsFactory->create($source, $target, included: [new Filter(FilterType::FILE_TYPE, 'audio')], excluded: [new Filter(FilterType::EXT, 'mp3')]);
+        $this->copyService()->copy($options, new NullOutput());
+
+        $expectedStructure = [
+            'X_audio1.wav',
+        ];
+
+        $this->assertDirectoryStructure($target, $expectedStructure);
+        self::assertFileDoesNotExist($target . '/audio1.mp3');
+    }
+
     /**
      * @return array<array{name: string, content: string, creationDate: string}>
      */

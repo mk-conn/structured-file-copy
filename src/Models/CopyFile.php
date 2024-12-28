@@ -34,10 +34,10 @@ class CopyFile {
     }
 
     public function fullTarget(): string {
-        return $this->target . DS . $this->filename;
+        return $this->target() . DS . $this->filename();
     }
 
     public function fullSource(): string {
-        return $this->source . DS . $this->filename;
+        return $this->source() . DS . $this->filename();
     }
 }
