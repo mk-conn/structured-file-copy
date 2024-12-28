@@ -12,6 +12,9 @@ use Symfony\Component\Finder\Finder;
 class DefaultCopyStrategy extends CopyStrategy {
     public function collectFiles(Finder $files, string $targetPath, Collection $copyFiles): void {
         foreach ($files as $file) {
+            if ($file->isDir()) {
+                continue;
+            }
             $copyFiles->add(new CopyFile(
                 $file->getPath(),
                 $targetPath,

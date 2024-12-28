@@ -50,7 +50,7 @@ class CopyService {
         $copyFiles->each(function (CopyFile $copyFile) use ($preserveTimestamps, $overwrite, $journal, $output): void {
             if (!$overwrite && $this->filesystem->exists($copyFile->fullTarget())) {
                 $journal->addUncopiedFile($copyFile, 'File already exists');
-                $output->writeln("File already exists: {$copyFile->fullSource()} -> {$copyFile->fullTarget()}");
+                $output->writeln("<warning>File already exists: {$copyFile->fullSource()} -> {$copyFile->fullTarget()}</warning>");
 
                 return;
             }

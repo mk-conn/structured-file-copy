@@ -24,6 +24,9 @@ abstract class GroupStrategy extends CopyStrategy {
         if (!$this->nextStrategy) {
             foreach ($groupedFiles as $groupKey => $files) {
                 foreach ($files as $file) {
+                    if ($file->isDir()) {
+                        continue;
+                    }
                     $copyFiles->add(new CopyFile(
                         $file->getPath(),
                         $targetPath . DS . $groupKey,

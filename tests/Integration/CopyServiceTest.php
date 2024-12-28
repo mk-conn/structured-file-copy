@@ -19,6 +19,7 @@ use MkConn\Sfc\Strategies\Copy\FileTypeStrategy;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
 use Symfony\Component\Console\Output\NullOutput;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Tests\FileFixture;
 use Tests\SfcTestCase;
@@ -275,6 +276,52 @@ final class CopyServiceTest extends SfcTestCase {
 
         $this->assertDirectoryStructure($target, $expectedStructure);
         self::assertFileDoesNotExist($target . '/audio1.mp3');
+    }
+
+    /**
+     * @throws FileCopyException
+     */
+    public function testCopyFromNestedDirectories(): void {
+        $fs = vfsStream::setup();
+        $sourceDir = new vfsStreamDirectory('source');
+        $fs->addChild($sourceDir);
+
+        $nestedDir = new vfsStreamDirectory('nested');
+        $sourceDir->addChild($nestedDir);
+
+        FileFixture::createFilesWithAttributes($nestedDir, $this->files());
+
+        $source = $fs->url() . '/source';
+        $target = $fs->url() . '/target';
+
+        $options = new CopyOptions($source, $target, [new DefaultCopyStrategy()]);
+        $this->copyService()->copy($options, new NullOutput());
+
+        $this->assertDirectoryStructure($target, ['01_file.txt', 'FILE_a.txt', 'file_B.txt', 'file_b.txt', 'z_ile_a_copy.txt', 'audio1.mp3', 'X_audio1.wav', '01_movie.mov']);
+    }
+
+    public function testCopyWithNonExistentSource(): void {
+        $source = '/non/existent/source';
+        $target = '/target';
+
+        $options = new CopyOptions($source, $target, [new DefaultCopyStrategy()]);
+
+        $this->expectException(FileCopyException::class);
+        $this->copyService()->copy($options, new NullOutput());
+    }
+
+    public function testDoesNotCopyExistingFiles(): void {
+        [$source, $target] = $this->setupTestEnvironment();
+
+        $fileSystem = new Filesystem();
+        $fileSystem->mkdir($target);
+        $fileSystem->touch($target . DS . '01_file.txt');
+
+        $options = new CopyOptions($source, $target, [new DefaultCopyStrategy()]);
+        $journal = $this->copyService()->copy($options, new NullOutput());
+
+        self::assertCount(1, $journal->uncopiedFiles());
+        self::assertCount(7, $journal->copiedFiles());
     }
 
     /**
