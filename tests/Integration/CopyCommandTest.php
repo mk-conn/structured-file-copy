@@ -25,8 +25,12 @@ final class CopyCommandTest extends SfcTestCase {
         $tester = new CommandTester($copyCommand);
         $tester->execute(
             [
-                '--source' => $this->root->getChild('sourceFolder')->url(),
-                '--target' => $url . '/targetFolder',
+                '--source'     => $this->root->getChild('sourceFolder')->url(),
+                '--target'     => $url . '/targetFolder',
+                '--include'    => 'ext:txt,ext:md,size:>=100,type:video',
+                '--exclude'    => 'name:file1',
+                '--sort'       => 'by:date:year,by:letter',
+                '--by-letter'  => '3',
             ]
         );
 

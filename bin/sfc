@@ -1,13 +1,11 @@
 #!/usr/bin/env php
 <?php
+
 declare(strict_types=1);
 
 use MkConn\Sfc\Commands\CopyCommand;
 use Symfony\Component\Console\Application;
 
-$currentDir = getcwd();
-
-echo $currentDir;
 $container = require dirname(__DIR__) . '/bootstrap/container.php';
 $app = $container->get(Application::class);
 $app->add($container->get(CopyCommand::class));
@@ -15,5 +13,5 @@ $app->add($container->get(CopyCommand::class));
 try {
     $app->run();
 } catch (Exception $e) {
-    print $e->getMessage() . PHP_EOL;
+    echo $e->getMessage() . PHP_EOL;
 }

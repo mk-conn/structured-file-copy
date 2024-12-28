@@ -4,21 +4,34 @@ declare(strict_types=1);
 
 namespace MkConn\Sfc\Tests\Unit\Strategies;
 
-use DI\DependencyException;
-use DI\NotFoundException;
-use MkConn\Sfc\Strategies\Copy\DateStrategy\YearStrategy;
+use MkConn\Sfc\Strategies\Copy\CopyStrategyInterface;
 use MkConn\Sfc\Strategies\StrategyPipeline;
 use MkConn\Sfc\Tests\SfcTestCase;
-use MkConn\Sfc\Tests\Unit\Strategies\Copy\MonthStrategyTest;
+use PHPUnit\Framework\MockObject\Exception;
+use Symfony\Component\Finder\Finder;
 
 class StrategyPipelineTest extends SfcTestCase {
     /**
-     * @throws DependencyException
-     * @throws NotFoundException
+     * @throws Exception
      */
-    public function testPipeline(): void {
-        $strategyPipeline = $this->container()->get(StrategyPipeline::class);
+    public function testRun(): void {
+        $yearStrategy = $this->createMock(CopyStrategyInterface::class);
+        $monthStrategy = $this->createMock(CopyStrategyInterface::class);
 
-        $strategyPipeline->add(YearStrategy::class)->add(MonthStrategyTest::, $args);
+        $yearStrategy->expects(self::once())
+                     ->method('withNextStrategy')
+                     ->with($monthStrategy)
+                     ->willReturnSelf();
+
+        $monthStrategy->expects(self::never())
+                      ->method('withNextStrategy');
+
+        $yearStrategy->expects(self::once())
+                     ->method('collectFiles');
+
+        $files = $this->createMock(Finder::class);
+
+        $strategyPipeline = new StrategyPipeline();
+        $strategyPipeline->run([$yearStrategy, $monthStrategy], $files, '/target');
     }
 }

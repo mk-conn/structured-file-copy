@@ -4,113 +4,122 @@ declare(strict_types=1);
 
 namespace MkConn\Sfc\Commands;
 
-use League\Flysystem\Filesystem;
-use MkConn\Sfc\File\Find;
-use MkConn\Sfc\Storage;
+use Exception;
+use MkConn\Sfc\Enums\FilterType;
+use MkConn\Sfc\Factories\CopyOptionsFactory;
+use MkConn\Sfc\Models\Filter;
+use MkConn\Sfc\Services\CopyService;
+use MkConn\Sfc\Services\FileService\FileTypes;
+use MkConn\Sfc\Strategies\AvailableStrategies;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use function MkConn\Sfc\humanFilesize;
-
-#[AsCommand(name: 'copy')]
+#[AsCommand(name: 'copy', description: 'Copies files from a source folder to a target folder in a structured way')]
 class CopyCommand extends Command {
-    public function __construct(private readonly Filesystem $filesystem) {
+    public function __construct(
+        private readonly AvailableStrategies $availableStrategies,
+        private readonly CopyOptionsFactory $copyOptionsFactory,
+        private readonly CopyService $copyService
+    ) {
         parent::__construct();
     }
 
     protected function configure(): void {
-        $this->setDescription('Copies files from a source folder to a target folder but in a sctructured way (if you want)');
+        $strategies = $this->availableStrategies->getStrategies();
+        $sortOptions = $strategies->keys()->toArray();
+        $fileTypes = FileTypes::getFileTypes();
+
         $this->addOption(
             'source',
             null,
             InputOption::VALUE_OPTIONAL,
-            'The from folder (if not set, files are taken from the folder where the command is running)'
+            'The source folder (if not set, files are taken from the folder where the command is executed)'
         );
-        $this->addOption('target', null, InputOption::VALUE_REQUIRED, 'Where to put the files');
+        $this->addOption('target', null, InputOption::VALUE_REQUIRED, 'The target folder where the files will be copied');
         $this->addOption(
             'sort',
             null,
-            InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
-            'Sort in folders by [date:day,date:month,date:year,alpha:name]'
-        );
-        $this->addOption(
-            'name-letters',
-            null,
             InputOption::VALUE_OPTIONAL,
-            'By how many (first) letters should the name sorted'
+            'Sort by strategies: <comment>[' . implode('|', $sortOptions) . ']</comment>. ' . PHP_EOL .
+            'E.g., if you want to sort by date (year) and then by by letter, you can use: <comment>--sort-by=by:date:year,by:letter</comment>.' . PHP_EOL .
+            'This will create a folder for each year and then a folder for each letter.',
+            'default'
         );
         $this->addOption(
-            'exclude-ext',
-            null,
-            InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
-            'Exclude files with extensions'
+            'include',
+            'i',
+            InputOption::VALUE_OPTIONAL,
+            'Filter files by <comment>[ext,type]</comment>. E.g., <comment>--filter=ext:jpg,ext:png,ext:gif,ext:heic</comment> or <comment>--filter=type:image</comment>' . PHP_EOL .
+            'Available types: <comment>[' . implode('|', $fileTypes) . ']</comment>'
         );
         $this->addOption(
-            'file-type',
-            null,
-            InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
-            'Move only a file type [image, video, office, text, richtext, pdf]'
+            'exclude',
+            'e',
+            InputOption::VALUE_OPTIONAL, 'Exclude files by <comment>[ext,type]</comment>. E.g., <comment>--exclude=jpg,png,gif</comment> or <comment>--exclude=type:image</comment>' . PHP_EOL .
+            'Available types: <comment>[' . implode('|', $fileTypes) . ']</comment>'
         );
-        $this->addOption(
-            'file-ext',
-            null,
-            InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY,
-            'Move only files with a specific extension'
-        );
+
+        foreach ($sortOptions as $sortOption) {
+            $strategy = $strategies->get($sortOption);
+            $availableOptions = $strategy?->availableOptions();
+
+            if ($availableOptions) {
+                foreach ($availableOptions as $availableOption => $info) {
+                    $this->addOption(
+                        $availableOption,
+                        null,
+                        InputOption::VALUE_OPTIONAL,
+                        "When <comment>$sortOption</comment> is used: {$info['description']}",
+                        $info['default'] ?? null
+                    );
+                }
+            }
+        }
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int {
         $source = $input->getOption('source') ?: getcwd();
-        $options['target'] = $input->getOption('target');
+        $target = $input->getOption('target');
 
         $output->writeln("source: $source");
-        $output->writeln("target: {$options['target']}");
+        $output->writeln("target: $target");
 
-        $types = $input->getOption('file-type');
-        $exts = $input->getOption('file-ext');
-        $exclude = $input->getOption('exclude-ext');
-        $sort = $input->getOption('sort');
+        $includes = $this->reduceIncludesOrExcludes($input->getOption('include'));
+        $excludes = $this->reduceIncludesOrExcludes($input->getOption('exclude'));
 
-        $options['sort'] = $sort;
-        $options['sort'][Storage::NAME_LETTERS] = $input->getOption('name-letters') ?: 1;
+        $sortBy = $input->getOption('sort');
+        $sortBy = $sortBy ? explode(',', $sortBy) : [];
+        $strategyOptions = $input->getOptions();
 
-        $output->writeln(
-            sprintf(
-                '<info>Collecting files to copy: (types: %s) (exts: %s) (sort: %s)</info>',
-                implode(', ', $types),
-                implode(', ', $exts),
-                implode(', ', $options['sort'])
-            )
-        );
+        $options = $this->copyOptionsFactory->create($source, $target, $sortBy, $strategyOptions, $includes, $excludes);
 
-        $findFiles = new Find($source, $types, $exts, $exclude);
-        $files = $findFiles->files();
-
-        $output->writeln("<info>Found {$files->count()} files to copy.</info>");
-
-        $storage = new Storage(iterator_to_array($files), $options, $output);
-
-        if ($storage->copy()) {
-            $fileSize = humanFilesize($storage->getTotalFileSize());
-            $output->writeln('');
-            $output->writeln("Copied {$storage->getTotalFiles()} of {$files->count()} files ({$fileSize})");
-            $output->writeln('Here is the log:');
-
-            foreach ($storage->getCopiedFiles() as $copiedFileName => $log) {
-                $output->writeln("<info>{$copiedFileName}->{$log['to']}</info>");
-                $output->writeln($log['result']);
-            }
+        try {
+            $this->copyService->copy($options, $output);
 
             return Command::SUCCESS;
-        } else {
-            if ($storage->hasErrors()) {
-                $output->writeln(implode("\n", $storage->getErrors()));
-            }
-
-            return Command::FAILURE;
+        } catch (Exception $e) {
+            $output->writeln("<error>{$e->getMessage()}</error>");
         }
+
+        return Command::FAILURE;
+    }
+
+    /**
+     * @return array<Filter>
+     */
+    private function reduceIncludesOrExcludes(string $inputData = ''): array {
+        $inputData = $inputData ? explode(',', $inputData) : [];
+
+        return array_reduce($inputData, function ($carry, $input) {
+            $input = explode(':', $input);
+            $filterType = FilterType::fromString($input[0]);
+            $filter = new Filter($filterType, $input[1]);
+            $carry[] = $filter;
+
+            return $carry;
+        });
     }
 }

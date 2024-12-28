@@ -6,24 +6,25 @@ namespace MkConn\Sfc\Strategies;
 
 use Illuminate\Support\Collection;
 use InvalidArgumentException;
+use MkConn\Sfc\Enums\SortOption;
 use MkConn\Sfc\Strategies\Copy\CopyStrategyInterface;
 
 readonly class AvailableStrategies {
     /**
-     * @param Collection<array-key, CopyStrategyInterface> $strategies
+     * @param Collection<string, CopyStrategyInterface> $strategies
      */
     public function __construct(private Collection $strategies) {}
 
     /**
-     * @return Collection<array-key, CopyStrategyInterface>
+     * @return Collection<string, CopyStrategyInterface>
      */
     public function getStrategies(): Collection {
         return $this->strategies;
     }
 
-    public function strategy(string $strategy): CopyStrategyInterface {
-        if (($strategy = $this->strategies->get($strategy)) === null) {
-            throw new InvalidArgumentException("Strategy $strategy not found");
+    public function strategyForSortOption(SortOption $sortOption): CopyStrategyInterface {
+        if (($strategy = $this->strategies->get($sortOption->name)) === null) {
+            throw new InvalidArgumentException("No strategy found for sort option: $sortOption->name");
         }
 
         return $strategy;

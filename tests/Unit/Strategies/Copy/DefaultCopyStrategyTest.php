@@ -6,21 +6,21 @@ namespace MkConn\Sfc\Tests\Unit\Strategies\Copy;
 
 use ArrayIterator;
 use MkConn\Sfc\Models\CopyFile;
-use MkConn\Sfc\Strategies\Copy\AlphaNumericStrategy;
+use MkConn\Sfc\Strategies\Copy\DefaultCopyStrategy;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\TestCase;
 use SplFileInfo;
 use Symfony\Component\Finder\Finder;
 
-class AlphaNameStrategyTest extends TestCase {
-    public function testFillBucket(): void {
+final class DefaultCopyStrategyTest extends TestCase {
+    public function testDefaultCopyStrategy(): void {
         try {
-            $strategy = new AlphaNumericStrategy();
+            $strategy = new DefaultCopyStrategy();
 
             $finderFiles = [
-                $this->createConfiguredMock(SplFileInfo::class, ['getFilename' => 'file1.txt', 'getRealPath' => '/source/file1.txt', 'getPath' => '/source', 'getMTime' => time()]),
-                $this->createConfiguredMock(SplFileInfo::class, ['getFilename' => 'file2.txt', 'getRealPath' => '/source/file2.txt', 'getPath' => '/source', 'getMTime' => time()]),
-                $this->createConfiguredMock(SplFileInfo::class, ['getFilename' => 'file3.txt', 'getRealPath' => '/source/file3.txt', 'getPath' => '/source', 'getMTime' => time()]),
+                $this->createConfiguredMock(SplFileInfo::class, ['getFilename' => 'file1.txt', 'getPath' => '/source', 'getMTime' => time(), 'getATime' => time()]),
+                $this->createConfiguredMock(SplFileInfo::class, ['getFilename' => 'file2.txt', 'getPath' => '/source', 'getMTime' => time(), 'getATime' => time()]),
+                $this->createConfiguredMock(SplFileInfo::class, ['getFilename' => 'file3.txt', 'getPath' => '/source', 'getMTime' => time(), 'getATime' => time()]),
             ];
 
             $files = $this->createMock(Finder::class);
@@ -33,11 +33,11 @@ class AlphaNameStrategyTest extends TestCase {
             self::assertCount(count($finderFiles), $copyFiles);
 
             foreach ($finderFiles as $finderFile) {
-                $source = $finderFile->getRealPath();
+                $source = $finderFile->getPath() . DS . $finderFile->getFilename();
                 $fullTarget = DS . 'target' . DS . $finderFile->getFilename();
 
                 self::assertTrue($copyFiles->contains(
-                    fn (CopyFile $file) => $file->source() === $source && $file->fullTarget() === $fullTarget && '/target' === $file->target()),
+                    fn (CopyFile $file) => $file->fullSource() === $source && $file->fullTarget() === $fullTarget && '/target' === $file->target()),
                     "CopyFiles does not contain expected file: {$finderFile->getFilename()}"
                 );
             }

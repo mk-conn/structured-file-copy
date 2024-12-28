@@ -7,13 +7,13 @@ namespace MkConn\Sfc\Strategies\Copy;
 use Illuminate\Support\Collection;
 use MkConn\Sfc\Models\CopyFile;
 use MkConn\Sfc\Strategies\CopyStrategy;
-use SplFileInfo;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
 
 abstract class GroupStrategy extends CopyStrategy {
     abstract public function getGroupKey(SplFileInfo $file): string;
 
-    public function collectFiles(Finder $files, string $targetPath, Collection $copyFiles, ?CopyStrategyInterface $nextStrategy = null): void {
+    public function collectFiles(Finder $files, string $targetPath, Collection $copyFiles): void {
         $groupedFiles = [];
 
         foreach ($files as $file) {
@@ -21,13 +21,15 @@ abstract class GroupStrategy extends CopyStrategy {
             $groupedFiles[$groupKey][] = $file;
         }
 
-        if (!$nextStrategy) {
+        if (!$this->nextStrategy) {
             foreach ($groupedFiles as $groupKey => $files) {
                 foreach ($files as $file) {
                     $copyFiles->add(new CopyFile(
-                        $file->getRealPath(),
+                        $file->getPath(),
                         $targetPath . DS . $groupKey,
-                        $file->getFilename()
+                        $file->getFilename(),
+                        $file->getMTime(),
+                        $file->getATime(),
                     ));
                 }
             }
@@ -38,7 +40,7 @@ abstract class GroupStrategy extends CopyStrategy {
         foreach ($groupedFiles as $groupKey => $groupFiles) {
             $nextFinder = new Finder();
             $nextFinder->append($groupFiles);
-            $nextStrategy->collectFiles($nextFinder, $targetPath . DS . $groupKey, $copyFiles);
+            $this->nextStrategy->collectFiles($nextFinder, $targetPath . DS . $groupKey, $copyFiles);
         }
     }
 }

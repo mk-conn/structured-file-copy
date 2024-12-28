@@ -7,8 +7,10 @@ namespace MkConn\Sfc\Models;
 class CopyFile {
     public function __construct(
         private readonly string $source,
-        private string $target,
+        private readonly string $target,
         private readonly string $filename,
+        private readonly int $mtime,
+        private readonly int $atime,
     ) {}
 
     public function filename(): string {
@@ -23,11 +25,19 @@ class CopyFile {
         return $this->target;
     }
 
-    public function addToTarget(string $path): void {
-        $this->target = $this->target . DIRECTORY_SEPARATOR . $path;
+    public function mtime(): int {
+        return $this->mtime;
+    }
+
+    public function atime(): int {
+        return $this->atime;
     }
 
     public function fullTarget(): string {
-        return $this->target . DIRECTORY_SEPARATOR . $this->filename;
+        return $this->target . DS . $this->filename;
+    }
+
+    public function fullSource(): string {
+        return $this->source . DS . $this->filename;
     }
 }
