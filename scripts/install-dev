@@ -1,0 +1,46 @@
+#!/usr/bin/env php
+<?php
+
+declare(strict_types=1);
+
+$root = realpath(__DIR__ . '/..');
+$devInstallDir = $root . '/scripts';
+$gitDir = $root . '/.git';
+$hooksDir = $gitDir . '/hooks';
+$preCommitFile = $hooksDir . '/pre-commit';
+$preCommitFileSource = $devInstallDir . '/pre-commit';
+$precommitHooksDir = $hooksDir . '/pre-commit.d';
+
+if (!is_dir($gitDir)) {
+    echo 'This is not a git repository.' . PHP_EOL;
+
+    exit(1);
+}
+
+if (file_exists($preCommitFile)) {
+    echo 'A pre-commit is already installed - will now exit here - you could remove yours and re-run this script.' . PHP_EOL;
+
+    exit(0);
+}
+
+if (!is_dir($precommitHooksDir)) {
+    mkdir($precommitHooksDir, 0o755);
+}
+
+copy($preCommitFileSource, $preCommitFile);
+chmod($preCommitFile, 0o755);
+
+// copy all pre-commit hooks from scripts dir to hooks dir
+$hooks = glob($devInstallDir . '/pre-commit-hooks/*');
+
+if (false !== $hooks && count($hooks) > 0) {
+    foreach ($hooks as $hook) {
+        $target = basename($hook);
+        copy($hook, $precommitHooksDir . '/' . $target);
+        chmod($precommitHooksDir . '/' . $target, 0o755);
+    }
+}
+
+echo 'Pre-commit installed.' . PHP_EOL;
+
+exit(0);

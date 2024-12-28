@@ -43,5 +43,14 @@
     "mikey179/vfsstream": "^1.6",
     "rector/rector": "^0.18.12",
     "phpstan/phpstan": "^1.12"
+  },
+  "scripts": {
+    "test": "phpunit",
+    "cs": "php-cs-fixer fix --config=.php_cs.dist",
+    "rector": "vendor/bin/rector process src tests --dry-run",
+    "phpstan": "phpstan analyse src tests --level=8",
+    "dev-install": [
+      "php scripts/install-dev"
+    ]
   }
 }

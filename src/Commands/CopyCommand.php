@@ -46,7 +46,7 @@ class CopyCommand extends Command {
             'Sort by strategies: <comment>[' . implode('|', $sortOptions) . ']</comment>. ' . PHP_EOL .
             'E.g., if you want to sort by date (year) and then by by letter, you can use: <comment>--sort-by=by:date:year,by:letter</comment>.' . PHP_EOL .
             'This will create a folder for each year and then a folder for each letter.',
-            'default'
+            'by:default'
         );
         $this->addOption(
             'include',

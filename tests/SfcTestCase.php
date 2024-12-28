@@ -23,6 +23,13 @@ class SfcTestCase extends PHPUnitTestCase {
         return self::$container;
     }
 
+    /**
+     * @template T
+     *
+     * @param class-string<T> $key
+     *
+     * @return mixed|T
+     */
     protected function fromContainer(string $key): mixed {
         try {
             return $this->container()->get($key);

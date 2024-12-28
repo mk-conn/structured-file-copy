@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Integration;
 
+use MkConn\Sfc\Enums\FilterType;
 use MkConn\Sfc\Exceptions\FileCopyException;
+use MkConn\Sfc\Factories\CopyOptionsFactory;
 use MkConn\Sfc\Models\CopyOptions;
+use MkConn\Sfc\Models\Filter;
 use MkConn\Sfc\Services\CopyService;
 use MkConn\Sfc\Strategies\Copy\ByLetterStrategy;
 use MkConn\Sfc\Strategies\Copy\DateStrategy\DayStrategy;
@@ -228,7 +231,20 @@ final class CopyServiceTest extends SfcTestCase {
         $this->assertDirectoryStructure($target, $expectedStructure);
     }
 
-    public function testCopyWithoutSpecificFileExtensions(): void {}
+    public function testCopyWithoutSpecificFileExtensions(): void {
+        [$source, $target] = $this->setupTestEnvironment();
+        $copyOptionsFactory = $this->fromContainer(CopyOptionsFactory::class);
+        $options = $copyOptionsFactory->create($source, $target, excluded: [new Filter(FilterType::EXT, 'txt')]);
+        $this->copyService()->copy($options, new NullOutput());
+
+        $expectedStructure = [
+            'audio1.mp3',
+            'X_audio1.wav',
+            '01_movie.mov',
+        ];
+
+        $this->assertDirectoryStructure($target, $expectedStructure);
+    }
 
     /**
      * @return array<array{name: string, content: string, creationDate: string}>
