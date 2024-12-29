@@ -15,17 +15,4 @@ abstract class CopyStrategy implements CopyStrategyInterface {
 
         return $clone;
     }
-
-    /**
-     * @param array<string, mixed> $options
-     *
-     * @return $this
-     */
-    public function withOptions(array $options): static {
-        return $this;
-    }
-
-    public function availableOptions(): ?array {
-        return null;
-    }
 }

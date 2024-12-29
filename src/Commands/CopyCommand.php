@@ -11,11 +11,13 @@ use MkConn\Sfc\Models\Filter;
 use MkConn\Sfc\Services\CopyService;
 use MkConn\Sfc\Services\FileService\FileTypes;
 use MkConn\Sfc\Strategies\AvailableStrategies;
+use MkConn\Sfc\Strategies\WithStrategyOptionsInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(name: 'copy', description: 'Copies files from a source folder to a target folder in a structured way')]
 class CopyCommand extends Command {
@@ -45,7 +47,7 @@ class CopyCommand extends Command {
             InputOption::VALUE_OPTIONAL,
             'Sort by strategies: <comment>[' . implode('|', $sortOptions) . ']</comment>. ' . PHP_EOL .
             'E.g., if you want to sort by date (year) and then by by letter, you can use: <comment>--sort-by=by:date:year,by:letter</comment>.' . PHP_EOL .
-            'This will create a folder for each year and then a folder for each letter.',
+            'This will create a folder for each year and then a folder for each letter.' . PHP_EOL,
             'by:default'
         );
         $this->addOption(
@@ -64,42 +66,56 @@ class CopyCommand extends Command {
 
         foreach ($sortOptions as $sortOption) {
             $strategy = $strategies->get($sortOption);
-            $availableOptions = $strategy?->availableOptions();
 
-            if ($availableOptions) {
-                foreach ($availableOptions as $availableOption => $info) {
-                    $this->addOption(
-                        $availableOption,
-                        null,
-                        InputOption::VALUE_OPTIONAL,
-                        "When <comment>$sortOption</comment> is used: {$info['description']}",
-                        $info['default'] ?? null
-                    );
+            if ($strategy instanceof WithStrategyOptionsInterface) {
+                $availableOptions = $strategy->availableOptions();
+
+                if ($availableOptions) {
+                    foreach ($availableOptions as $availableOption => $info) {
+                        $this->addOption(
+                            $availableOption,
+                            null,
+                            InputOption::VALUE_OPTIONAL,
+                            "When <comment>$sortOption</comment> is used: {$info['description']}",
+                            $info['default'] ?? null
+                        );
+                    }
                 }
             }
         }
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int {
-        $source = $input->getOption('source') ?: getcwd();
-        $target = $input->getOption('target');
-
-        $output->writeln("source: $source");
-        $output->writeln("target: $target");
-
-        $includes = $this->reduceIncludesOrExcludes($input->getOption('include'));
-        $excludes = $this->reduceIncludesOrExcludes($input->getOption('exclude'));
-
-        $sortBy = $input->getOption('sort');
-        $sortBy = $sortBy ? explode(',', $sortBy) : [];
-        $strategyOptions = $input->getOptions();
-
-        $options = $this->copyOptionsFactory->create($source, $target, $sortBy, $strategyOptions, $includes, $excludes);
-
         try {
-            $this->copyService->copy($options, $output);
+            $io = new SymfonyStyle($input, $output);
 
-            return Command::SUCCESS;
+            $source = $input->getOption('source') ?: getcwd();
+            $target = $input->getOption('target');
+            $io->title('Copying files from source to target');
+            $io->block([
+                'Source: ' . $source,
+                'Target: ' . $target,
+            ]);
+
+            if ($io->confirm('Let\'s do this?', false)) {
+                $included = $this->reduceIncludesOrExcludes($input->getOption('include') ?? '');
+                $excluded = $this->reduceIncludesOrExcludes($input->getOption('exclude') ?? '');
+
+                $sortBy = $input->getOption('sort');
+                $sortBy = $sortBy ? explode(',', $sortBy) : [];
+                $strategyOptions = $input->getOptions();
+
+                $options = $this->copyOptionsFactory->create($source, $target, $sortBy, $strategyOptions, $included, $excluded);
+
+                $journal = $this->copyService->copy($options, $output);
+
+                $io->success([
+                    'Copied files: ' . count($journal->copiedFiles()),
+                    'Uncopied files: ' . count($journal->uncopiedFiles()),
+                ]);
+
+                return Command::SUCCESS;
+            }
         } catch (Exception $e) {
             $output->writeln("<error>{$e->getMessage()}</error>");
         }
@@ -120,6 +136,6 @@ class CopyCommand extends Command {
             $carry[] = $filter;
 
             return $carry;
-        });
+        }) ?? [];
     }
 }

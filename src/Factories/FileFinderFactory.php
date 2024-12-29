@@ -78,7 +78,7 @@ readonly class FileFinderFactory {
 
                     break;
                 case FilterType::NAME:
-                    $finder->notName("$filter->value");
+                    $finder->notContains("$filter->value");
 
                     break;
                 case FilterType::FILE_TYPE:

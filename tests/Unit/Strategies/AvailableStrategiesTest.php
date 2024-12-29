@@ -27,9 +27,9 @@ final class AvailableStrategiesTest extends TestCase {
 
     public function testGetStrategyBySortOption(): void {
         $strategies = new Collection();
-        $strategies->put(SortOption::BY_LETTER->name, new ByLetterStrategy());
-        $strategies->put(SortOption::DEFAULT->name, new DefaultCopyStrategy());
-        $strategies->put(SortOption::DATE_YEAR->name, new YearStrategy());
+        $strategies->put(SortOption::BY_LETTER->value, new ByLetterStrategy());
+        $strategies->put(SortOption::DEFAULT->value, new DefaultCopyStrategy());
+        $strategies->put(SortOption::DATE_YEAR->value, new YearStrategy());
         $availableStrategies = new AvailableStrategies($strategies);
 
         $strategy = $availableStrategies->strategyForSortOption(SortOption::DEFAULT);

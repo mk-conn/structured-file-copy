@@ -7,6 +7,7 @@ namespace MkConn\Sfc\Factories;
 use MkConn\Sfc\Enums\SortOption;
 use MkConn\Sfc\Strategies\AvailableStrategies;
 use MkConn\Sfc\Strategies\Copy\CopyStrategyInterface;
+use MkConn\Sfc\Strategies\WithStrategyOptionsInterface;
 
 readonly class StrategieFactory {
     public function __construct(private AvailableStrategies $availableStrategies) {}
@@ -27,7 +28,7 @@ readonly class StrategieFactory {
         foreach ($sortBy as $sort) {
             $strategy = $this->availableStrategies->strategyForSortOption(SortOption::from($sort));
 
-            if (null !== $strategy->availableOptions()) {
+            if ($strategy instanceof WithStrategyOptionsInterface) {
                 $strategy = $strategy->withOptions($strategyOptions);
             }
 

@@ -23,8 +23,8 @@ readonly class AvailableStrategies {
     }
 
     public function strategyForSortOption(SortOption $sortOption): CopyStrategyInterface {
-        if (($strategy = $this->strategies->get($sortOption->name)) === null) {
-            throw new InvalidArgumentException("No strategy found for sort option: $sortOption->name");
+        if (($strategy = $this->strategies->get($sortOption->value)) === null) {
+            throw new InvalidArgumentException("No strategy found for sort option: $sortOption->value");
         }
 
         return $strategy;

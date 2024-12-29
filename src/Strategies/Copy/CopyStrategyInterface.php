@@ -6,10 +6,9 @@ namespace MkConn\Sfc\Strategies\Copy;
 
 use Illuminate\Support\Collection;
 use MkConn\Sfc\Models\CopyFile;
-use MkConn\Sfc\Strategies\WithStrategyOptionsInterface;
 use Symfony\Component\Finder\Finder;
 
-interface CopyStrategyInterface extends WithStrategyOptionsInterface {
+interface CopyStrategyInterface {
     /**
      * @param Collection<array-key, CopyFile> $copyFiles
      */
