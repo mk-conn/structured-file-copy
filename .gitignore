@@ -1,9 +1,11 @@
 /vendor/
-# PHPUnit
 .phpunit.cache
-
-# Build data
-/build/
-
 .idea
 .php-cs-fixer.cache
+/vfs
+.DS_Store
+.phpunit.result.cache
+temp/*
+.cache
+composer.lock
+cache/*
