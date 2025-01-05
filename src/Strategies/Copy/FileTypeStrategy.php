@@ -13,8 +13,4 @@ class FileTypeStrategy extends GroupStrategy {
     public function getGroupKey(SplFileInfo $file): string {
         return $this->fileTypes->getTypeForFile($file);
     }
-
-    public function withOptions(array $options): static {
-        return $this;
-    }
 }
