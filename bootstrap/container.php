@@ -2,15 +2,14 @@
 
 declare(strict_types=1);
 
-use Composer\InstalledVersions;
 use DI\ContainerBuilder;
 
 if (file_exists(__DIR__ . '/../vendor/autoload.php')) {
     // local composer
     require __DIR__ . '/../vendor/autoload.php';
-} elseif (InstalledVersions::isInstalled('mk-conn/structured-file-copy')) {
+} elseif (file_exists(__DIR__ . '/../../../autoload.php')) {
     // global composer
-    require InstalledVersions::getInstallPath('mk-conn/structured-file-copy') . '/autoload.php';
+    require __DIR__ . '/../../../autoload.php';
 } else {
     echo 'Please run composer install';
 
