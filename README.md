@@ -4,11 +4,10 @@ A little cli helper to copy files from one source folder into a target folder st
 
 ## Why this in PHP and not just use given commandline linux/unix tools?
 
-* Well... I like it like this: `sfc copy --include=type:image --sort=by:date:year,by:date:month`
-  instead of
-  `find -type | xargs... err what?.. err.. what was the next unix tool to pipe and filter files or types...? *sigh* Lets have a look on stack-overflow 😊`
-* I primarly use it to copy photos and videos from my camera/phone into my local library which I have sorted by year and
-  month.
+* Well... I prefer it like this: `sfc copy --include=type:image --sort=by:date:year,by:date:month` instead of
+  `find -type | xargs... err what?.. err.. what was the next unix tool to pipe and filter files or types...? *sigh* Let's check Stack Overflow 😊`
+* I primarily use it to copy photos and videos from my camera/phone into my local library, which I have sorted by year
+  and month and file type.
 
 ## How to use
 
