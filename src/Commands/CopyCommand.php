@@ -10,6 +10,7 @@ use MkConn\Sfc\Factories\CopyOptionsFactory;
 use MkConn\Sfc\Models\Filter;
 use MkConn\Sfc\Services\CopyService;
 use MkConn\Sfc\Services\FileService\FileTypes;
+use MkConn\Sfc\Services\FilesystemService;
 use MkConn\Sfc\Strategies\AvailableStrategies;
 use MkConn\Sfc\Strategies\WithStrategyOptionsInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -24,7 +25,8 @@ class CopyCommand extends Command {
     public function __construct(
         private readonly AvailableStrategies $availableStrategies,
         private readonly CopyOptionsFactory $copyOptionsFactory,
-        private readonly CopyService $copyService
+        private readonly CopyService $copyService,
+        private readonly FilesystemService $filesystemService,
     ) {
         parent::__construct();
     }
@@ -91,7 +93,7 @@ class CopyCommand extends Command {
 
     protected function execute(InputInterface $input, OutputInterface $output): int {
         $io = new SymfonyStyle($input, $output);
-        $source = realpath($input->getOption('source') ?: getcwd());
+        $source = $this->filesystemService->realpath($input->getOption('source') ?: getcwd());
         $target = $input->getOption('target');
 
         if (!$source) {
@@ -100,7 +102,7 @@ class CopyCommand extends Command {
             return Command::FAILURE;
         }
 
-        if (!file_exists(dirname($target))) {
+        if (!$this->filesystemService->fileExists(dirname($target))) {
             $output->writeln('<error>Target not writable</error>');
 
             return Command::FAILURE;
@@ -129,9 +131,9 @@ class CopyCommand extends Command {
                     'Copied files: ' . count($journal->copiedFiles()),
                     'Uncopied files: ' . count($journal->uncopiedFiles()),
                 ]);
-
-                return Command::SUCCESS;
             }
+
+            return Command::SUCCESS;
         } catch (Exception $e) {
             $output->writeln("<error>{$e->getMessage()}</error>");
         }
