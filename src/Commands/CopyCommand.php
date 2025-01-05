@@ -67,20 +67,24 @@ class CopyCommand extends Command {
         foreach ($sortOptions as $sortOption) {
             $strategy = $strategies->get($sortOption);
 
-            if ($strategy instanceof WithStrategyOptionsInterface) {
-                $availableOptions = $strategy->availableOptions();
+            if (!$strategy instanceof WithStrategyOptionsInterface) {
+                continue;
+            }
 
-                if ($availableOptions) {
-                    foreach ($availableOptions as $availableOption => $info) {
-                        $this->addOption(
-                            $availableOption,
-                            null,
-                            InputOption::VALUE_OPTIONAL,
-                            "When <comment>$sortOption</comment> is used: {$info['description']}",
-                            $info['default'] ?? null
-                        );
-                    }
-                }
+            $availableOptions = $strategy->availableOptions();
+
+            if (!$availableOptions) {
+                continue;
+            }
+
+            foreach ($availableOptions as $availableOption => $info) {
+                $this->addOption(
+                    $availableOption,
+                    null,
+                    InputOption::VALUE_OPTIONAL,
+                    "When <comment>$sortOption</comment> is used: {$info['description']}",
+                    $info['default'] ?? null
+                );
             }
         }
     }
