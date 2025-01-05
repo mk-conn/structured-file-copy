@@ -18,6 +18,7 @@ use MkConn\Sfc\Strategies\Copy\DefaultCopyStrategy;
 use MkConn\Sfc\Strategies\Copy\FileTypeStrategy;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
+use org\bovigo\vfs\vfsStreamFile;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
@@ -298,6 +299,59 @@ final class CopyServiceTest extends SfcTestCase {
         $this->copyService()->copy($options, new NullOutput());
 
         $this->assertDirectoryStructure($target, ['01_file.txt', 'FILE_a.txt', 'file_B.txt', 'file_b.txt', 'z_ile_a_copy.txt', 'audio1.mp3', 'X_audio1.wav', '01_movie.mov']);
+    }
+
+    public function testCopyWithExcludedName(): void {
+        [$source, $target] = $this->setupTestEnvironment();
+        $copyOptionsFactory = $this->fromContainer(CopyOptionsFactory::class);
+        $options = $copyOptionsFactory->create($source, $target, excluded: [new Filter(FilterType::NAME, 'file_B.txt')]);
+        $this->copyService()->copy($options, new NullOutput());
+
+        $expectedStructure = [
+            '01_file.txt',
+            'FILE_a.txt',
+            'file_b.txt',
+            'z_ile_a_copy.txt',
+            'audio1.mp3',
+            'X_audio1.wav',
+            '01_movie.mov',
+        ];
+
+        self::assertFileDoesNotExist($target . '/file_B.txt');
+        $this->assertDirectoryStructure($target, $expectedStructure);
+    }
+
+    public function testCopyWithExcludedDirectory(): void {
+        $fs = vfsStream::setup();
+        $sourceDir = new vfsStreamDirectory('source');
+        $fs->addChild($sourceDir);
+
+        $excludedDir = new vfsStreamDirectory('2024');
+        $sourceDir->addChild($excludedDir);
+        $file = new vfsStreamFile('some-file.txt');
+        $file->lastModified(strtotime('2024-03-01 09:00:00'));
+        $excludedDir->addChild($file);
+
+        $consideredDir = new vfsStreamDirectory('2025');
+        $sourceDir->addChild($consideredDir);
+
+        FileFixture::createFilesWithAttributes($consideredDir, $this->files());
+
+        $source = $fs->url() . '/source';
+        $target = $fs->url() . '/target';
+
+        $copyOptionsFactory = $this->fromContainer(CopyOptionsFactory::class);
+        $options = $copyOptionsFactory->create($source, $target, sortBy: ['by:date:year'], excluded: [new Filter(FilterType::DIRECTORY, '2024')]);
+        $this->copyService()->copy($options, new NullOutput());
+
+        $expectedStructure = [
+            '2024' => ['01_file.txt', 'file_b.txt', 'z_ile_a_copy.txt', 'audio1.mp3', 'X_audio1.wav'],
+            '2022' => ['FILE_a.txt', 'file_B.txt'],
+            '2021' => ['01_movie.mov'],
+        ];
+
+        $this->assertDirectoryStructure($target, $expectedStructure);
+        self::assertFileDoesNotExist($fs->url() . '/target/2024/some-file.txt');
     }
 
     public function testCopyWithNonExistentSource(): void {
