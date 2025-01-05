@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d646d8bfabf668ac769aacd221c704b1",
+    "content-hash": "3b50180ab9c1f45557b2a3bd3e0f1c3d",
     "packages": [
         {
             "name": "illuminate/collections",
@@ -3341,21 +3341,21 @@
         },
         {
             "name": "rector/rector",
-            "version": "0.18.13",
+            "version": "0.19.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "f8011a76d36aa4f839f60f3b4f97707d97176618"
+                "reference": "de3b3bb159abd704b144aa86fb244f7f1f4ac947"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/f8011a76d36aa4f839f60f3b4f97707d97176618",
-                "reference": "f8011a76d36aa4f839f60f3b4f97707d97176618",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/de3b3bb159abd704b144aa86fb244f7f1f4ac947",
+                "reference": "de3b3bb159abd704b144aa86fb244f7f1f4ac947",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.2|^8.0",
-                "phpstan/phpstan": "^1.10.35"
+                "phpstan/phpstan": "^1.10.56"
             },
             "conflict": {
                 "rector/rector-doctrine": "*",
@@ -3385,7 +3385,7 @@
             ],
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/0.18.13"
+                "source": "https://github.com/rectorphp/rector/tree/0.19.8"
             },
             "funding": [
                 {
@@ -3393,7 +3393,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-12-20T16:08:01+00:00"
+            "time": "2024-02-05T10:59:13+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -4925,12 +4925,12 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
         "php": ">=8.3"
     },
-    "platform-dev": {},
+    "platform-dev": [],
     "plugin-api-version": "2.6.0"
 }
