@@ -4,7 +4,7 @@ A little cli helper to copy files from one source folder into a target folder st
 
 ## Why this in PHP and not just use given commandline linux/unix tools?
 
-* Well... I like it like this: `structure-copy copy:struct --file-type=image --sort=date:year --sort=date:month`
+* Well... I like it like this: `sfc copy --include=type:image --sort=by:date:year,by:date:month`
   instead of
   `find -type | xargs... err what?.. err.. what was the next unix tool to pipe and filter files or types...? *sigh* Lets have a look on stack-overflow 😊`
 * I primarly use it to copy photos and videos from my camera/phone into my local library which I have sorted by year and
@@ -67,8 +67,5 @@ Options:
 
 ## TBD
 
-* Add a dry run
+* Add a dry run (just show what would be copied)
 * Omit log at the end if not wanted
-* Sort into date:day folders
-* Sort into folders by filename (with user defined number of leading letters)
-* Write tests
