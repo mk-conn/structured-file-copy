@@ -1,0 +1,186 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Property MkConn\\\\Sfc\\\\Commands\\\\CopyCommand\\:\\:\\$filesystem is never read, only written\\.$#"
+			count: 1
+			path: src/Commands/CopyCommand.php
+
+		-
+			message: "#^Method MkConn\\\\Sfc\\\\File\\\\Find\\:\\:__construct\\(\\) has parameter \\$exclude with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/File/Find.php
+
+		-
+			message: "#^Method MkConn\\\\Sfc\\\\File\\\\Find\\:\\:__construct\\(\\) has parameter \\$exts with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/File/Find.php
+
+		-
+			message: "#^Method MkConn\\\\Sfc\\\\File\\\\Find\\:\\:__construct\\(\\) has parameter \\$types with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/File/Find.php
+
+		-
+			message: "#^Static property MkConn\\\\Sfc\\\\File\\\\Find\\:\\:\\$typeMap \\(array\\<string, array\\<string\\>\\>\\) does not accept default value of type array\\<int\\|string, array\\<int, string\\>\\|string\\>\\.$#"
+			count: 1
+			path: src/File/Find.php
+
+		-
+			message: "#^Method MkConn\\\\Sfc\\\\Models\\\\Options\\:\\:fromArray\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Models/Options.php
+
+		-
+			message: "#^Instantiated class MkConn\\\\Sfc\\\\Services\\\\AlphaNameCopyService not found\\.$#"
+			count: 1
+			path: src/Services/AbstractCopyService.php
+
+		-
+			message: "#^Instantiated class MkConn\\\\Sfc\\\\Services\\\\DateDayCopyService not found\\.$#"
+			count: 1
+			path: src/Services/AbstractCopyService.php
+
+		-
+			message: "#^Instantiated class MkConn\\\\Sfc\\\\Services\\\\DateMonthCopyService not found\\.$#"
+			count: 1
+			path: src/Services/AbstractCopyService.php
+
+		-
+			message: "#^Instantiated class MkConn\\\\Sfc\\\\Services\\\\DateYear not found\\.$#"
+			count: 1
+			path: src/Services/AbstractCopyService.php
+
+		-
+			message: "#^Instantiated class MkConn\\\\Sfc\\\\Services\\\\NameLettersCopyService not found\\.$#"
+			count: 1
+			path: src/Services/AbstractCopyService.php
+
+		-
+			message: "#^Method MkConn\\\\Sfc\\\\Services\\\\AbstractCopyService\\:\\:__construct\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Services/AbstractCopyService.php
+
+		-
+			message: "#^Method MkConn\\\\Sfc\\\\Services\\\\AbstractCopyService\\:\\:createFromOptions\\(\\) has invalid return type MkConn\\\\Sfc\\\\Services\\\\AlphaNameCopyService\\.$#"
+			count: 1
+			path: src/Services/AbstractCopyService.php
+
+		-
+			message: "#^Method MkConn\\\\Sfc\\\\Services\\\\AbstractCopyService\\:\\:createFromOptions\\(\\) has invalid return type MkConn\\\\Sfc\\\\Services\\\\DateDayCopyService\\.$#"
+			count: 1
+			path: src/Services/AbstractCopyService.php
+
+		-
+			message: "#^Method MkConn\\\\Sfc\\\\Services\\\\AbstractCopyService\\:\\:createFromOptions\\(\\) has invalid return type MkConn\\\\Sfc\\\\Services\\\\DateMonthCopyService\\.$#"
+			count: 1
+			path: src/Services/AbstractCopyService.php
+
+		-
+			message: "#^Method MkConn\\\\Sfc\\\\Services\\\\AbstractCopyService\\:\\:createFromOptions\\(\\) has invalid return type MkConn\\\\Sfc\\\\Services\\\\DateYear\\.$#"
+			count: 1
+			path: src/Services/AbstractCopyService.php
+
+		-
+			message: "#^Method MkConn\\\\Sfc\\\\Services\\\\AbstractCopyService\\:\\:createFromOptions\\(\\) has invalid return type MkConn\\\\Sfc\\\\Services\\\\NameLettersCopyService\\.$#"
+			count: 1
+			path: src/Services/AbstractCopyService.php
+
+		-
+			message: "#^Method MkConn\\\\Sfc\\\\Services\\\\AbstractCopyService\\:\\:createFromOptions\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Services/AbstractCopyService.php
+
+		-
+			message: "#^Call to an undefined method MkConn\\\\Sfc\\\\Services\\\\Copy\\\\DateYear\\:\\:getFiles\\(\\)\\.$#"
+			count: 1
+			path: src/Services/Copy/DateYear.php
+
+		-
+			message: "#^Parameter \\#2 \\$timestamp of function date expects int\\|null, int\\|false given\\.$#"
+			count: 1
+			path: src/Services/Copy/DateYear.php
+
+		-
+			message: "#^Method MkConn\\\\Sfc\\\\Storage\\:\\:__construct\\(\\) has parameter \\$files with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Storage.php
+
+		-
+			message: "#^Method MkConn\\\\Sfc\\\\Storage\\:\\:__construct\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Storage.php
+
+		-
+			message: "#^Method MkConn\\\\Sfc\\\\Storage\\:\\:byDay\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Storage.php
+
+		-
+			message: "#^Method MkConn\\\\Sfc\\\\Storage\\:\\:byDay\\(\\) has parameter \\$files with no type specified\\.$#"
+			count: 1
+			path: src/Storage.php
+
+		-
+			message: "#^Method MkConn\\\\Sfc\\\\Storage\\:\\:byMonth\\(\\) has parameter \\$files with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Storage.php
+
+		-
+			message: "#^Method MkConn\\\\Sfc\\\\Storage\\:\\:byMonth\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Storage.php
+
+		-
+			message: "#^Method MkConn\\\\Sfc\\\\Storage\\:\\:byName\\(\\) has no return type specified\\.$#"
+			count: 1
+			path: src/Storage.php
+
+		-
+			message: "#^Method MkConn\\\\Sfc\\\\Storage\\:\\:byName\\(\\) has parameter \\$countLetters with no type specified\\.$#"
+			count: 1
+			path: src/Storage.php
+
+		-
+			message: "#^Method MkConn\\\\Sfc\\\\Storage\\:\\:byName\\(\\) has parameter \\$files with no type specified\\.$#"
+			count: 1
+			path: src/Storage.php
+
+		-
+			message: "#^Method MkConn\\\\Sfc\\\\Storage\\:\\:byYear\\(\\) has parameter \\$files with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Storage.php
+
+		-
+			message: "#^Method MkConn\\\\Sfc\\\\Storage\\:\\:byYear\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Storage.php
+
+		-
+			message: "#^Method MkConn\\\\Sfc\\\\Storage\\:\\:getCopiedFiles\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Storage.php
+
+		-
+			message: "#^Method MkConn\\\\Sfc\\\\Storage\\:\\:getErrors\\(\\) return type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Storage.php
+
+		-
+			message: "#^Method MkConn\\\\Sfc\\\\Storage\\:\\:setOptions\\(\\) has parameter \\$options with no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Storage.php
+
+		-
+			message: "#^Property MkConn\\\\Sfc\\\\Storage\\:\\:\\$copiedFiles type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Storage.php
+
+		-
+			message: "#^Property MkConn\\\\Sfc\\\\Storage\\:\\:\\$errors type has no value type specified in iterable type array\\.$#"
+			count: 1
+			path: src/Storage.php
+
+		-
+			message: "#^Call to static method createFilesWithAttributes\\(\\) on an unknown class FileFixture\\.$#"
+			count: 1
+			path: tests/integration/CopyServiceTest.php
