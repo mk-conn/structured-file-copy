@@ -86,11 +86,23 @@ class CopyCommand extends Command {
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int {
-        try {
-            $io = new SymfonyStyle($input, $output);
+        $io = new SymfonyStyle($input, $output);
+        $source = realpath($input->getOption('source') ?: getcwd());
+        $target = $input->getOption('target');
 
-            $source = $input->getOption('source') ?: getcwd();
-            $target = $input->getOption('target');
+        if (!$source) {
+            $output->writeln('<error>Source folder does not exist</error>');
+
+            return Command::FAILURE;
+        }
+
+        if (!file_exists(dirname($target))) {
+            $output->writeln('<error>Target not writable</error>');
+
+            return Command::FAILURE;
+        }
+
+        try {
             $io->title('Copying files from source to target');
             $io->block([
                 'Source: ' . $source,
