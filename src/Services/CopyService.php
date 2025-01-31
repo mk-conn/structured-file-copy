@@ -31,14 +31,15 @@ class CopyService {
             throw new FileCopyException($options->source, $options->target, 'Source folder does not exist');
         }
 
-        $copyFiles = $this->strategyPipeline->run(
+        $filesToCopy = $this->strategyPipeline->run(
             $options->strategies,
             $this->fileFinderFactory->create($options->source, $options->included, $options->excluded),
             $options->target
         );
+
         $journal = $this->journalFactory->create($options->source, $options->target);
 
-        $this->copyFiles($copyFiles, $options->preserveTimestamps, $options->overwrite, $journal, $output);
+        $this->copyFiles($filesToCopy, $options->preserveTimestamps, $options->overwrite, $journal, $output);
 
         return $journal;
     }
