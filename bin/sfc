@@ -4,11 +4,13 @@
 declare(strict_types=1);
 
 use MkConn\Sfc\Commands\CopyCommand;
+use MkConn\Sfc\Commands\ShowFileTypesCommand;
 use Symfony\Component\Console\Application;
 
 $container = require dirname(__DIR__) . '/bootstrap/container.php';
 $app = $container->get(Application::class);
 $app->add($container->get(CopyCommand::class));
+$app->add($container->get(ShowFileTypesCommand::class));
 
 try {
     $app->run();
