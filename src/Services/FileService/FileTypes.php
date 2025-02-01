@@ -31,6 +31,27 @@ class FileTypes {
     }
 
     /**
+     * @return array<string>
+     */
+    public function getFilesForType(string $fileType): array {
+        $extensions = [];
+        $mimeTypes = self::$typeMap[$fileType] ?? [];
+
+        foreach ($mimeTypes as $mimeType) {
+            $extensions = array_merge($extensions, $this->mimeTypes->getExtensions($mimeType));
+        }
+
+        return $extensions;
+    }
+
+    /**
+     * @return array<string, array<string>>
+     */
+    public function getTypeMap(): array {
+        return self::$typeMap;
+    }
+
+    /**
      * @var array<string, array<string>>
      */
     public static array $typeMap = [
