@@ -14,12 +14,16 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 #[AsCommand(name: 'file-types', description: 'Show the file types')]
 class ShowFileTypesCommand extends Command {
+    public function __construct(private readonly FileTypes $fileTypes) {
+        parent::__construct();
+    }
+
     protected function configure(): void {
         $this->setHelp('This command shows the file types');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int {
-        $rows = $this->createTableRows(FileTypes::$typeMap);
+        $rows = $this->createTableRows($this->fileTypes->getTypeMap());
 
         $table = new Table($output);
         $table->setHeaders(['File Type', 'Extensions']);
@@ -37,9 +41,10 @@ class ShowFileTypesCommand extends Command {
     private function createTableRows(array $fileTypes): array {
         $rows = [];
 
-        foreach ($fileTypes as $type => $extensions) {
+        foreach ($fileTypes as $fileType => $mimeTypes) {
+            $extensions = $this->fileTypes->getFilesForType($fileType);
             $wrappedExtensions = wordwrap(implode(', ', $extensions), 80, "\n", true);
-            $rows[] = [$type, $wrappedExtensions];
+            $rows[] = [$fileType, $wrappedExtensions];
             $rows[] = new TableSeparator();
         }
 
