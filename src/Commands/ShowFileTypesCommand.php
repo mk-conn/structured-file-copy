@@ -12,14 +12,10 @@ use Symfony\Component\Console\Helper\TableSeparator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-#[AsCommand(name: 'file-types', description: 'Show the file types')]
+#[AsCommand(name: 'file-types', description: 'Show file types to file extensions mapping')]
 class ShowFileTypesCommand extends Command {
     public function __construct(private readonly FileTypes $fileTypes) {
         parent::__construct();
-    }
-
-    protected function configure(): void {
-        $this->setHelp('This command shows the file types');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int {
