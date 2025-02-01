@@ -44,7 +44,6 @@ class ShowFileTypesCommand extends Command {
         foreach ($fileTypes as $fileType => $mimeTypes) {
             $extensions = $this->fileTypes->getFilesForType($fileType);
             $wrappedExtensions = wordwrap(implode(', ', $extensions), 80, "\n", true);
-
             $rows[] = [$fileType, $wrappedExtensions];
             $rows[] = new TableSeparator();
         }
