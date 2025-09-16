@@ -56,7 +56,7 @@ class CopyCommand extends Command {
             'include',
             'i',
             InputOption::VALUE_OPTIONAL,
-            'Filter files by <comment>[ext,type]</comment>. E.g., <comment>--filter=ext:jpg,ext:png,ext:gif,ext:heic</comment> or <comment>--filter=type:image</comment>' . PHP_EOL .
+            'Filter files by <comment>[ext,type]</comment>. E.g., <comment>--include=ext:jpg,ext:png,ext:gif,ext:heic</comment> or <comment>--include=type:image</comment>' . PHP_EOL .
             'Available types: <comment>[' . implode('|', $fileTypes) . ']</comment>'
         );
         $this->addOption(
