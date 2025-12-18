@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use DI\Container;
 use Illuminate\Support\Collection;
 use MkConn\Sfc\Enums\SortOption;
 use MkConn\Sfc\Strategies\AvailableStrategies;
@@ -13,7 +14,7 @@ use MkConn\Sfc\Strategies\Copy\DefaultCopyStrategy;
 use MkConn\Sfc\Strategies\Copy\FileTypeStrategy;
 
 return [
-    AvailableStrategies::class => function (Psr\Container\ContainerInterface $c) {
+    AvailableStrategies::class => function (Container $c) {
         $collection = new Collection();
         $collection->put(SortOption::DEFAULT->value, $c->get(DefaultCopyStrategy::class));
         $collection->put(SortOption::BY_LETTER->value, $c->get(ByLetterStrategy::class));

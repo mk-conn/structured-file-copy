@@ -18,7 +18,7 @@ readonly class FileFinderFactory {
      * @param array<Filter> $exclude
      */
     public function create(string $source, array $include = [], array $exclude = []): Finder {
-        $finder = (new Finder())->in($source);
+        $finder = new Finder()->in($source);
 
         if (!empty($include)) {
             $finder = $this->addIncludes($finder, $include);
@@ -36,7 +36,7 @@ readonly class FileFinderFactory {
      */
     private function addIncludes(Finder $finder, array $filters): Finder {
         foreach ($filters as $filter) {
-            switch ($filter->filterType) {
+            switch ($filter->filterType->name) {
                 case FilterType::EXT:
                     $finder->name("*.$filter->value");
 
@@ -101,7 +101,7 @@ readonly class FileFinderFactory {
         $types = FileTypes::$typeMap[$fileType] ?? [];
 
         foreach ($types as $type) {
-            $exts = array_merge($exts, array_map(fn (string $ext) => "*.$ext", $this->mimeTypes->getExtensions($type)));
+            $exts = array_merge($exts, array_map(fn (string $ext) => '/\.' . preg_quote($ext, '/') . '$/i', $this->mimeTypes->getExtensions($type)));
         }
 
         return $exts;
