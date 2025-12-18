@@ -18,7 +18,7 @@ readonly class FileFinderFactory {
      * @param array<Filter> $exclude
      */
     public function create(string $source, array $include = [], array $exclude = []): Finder {
-        $finder = new Finder()->in($source);
+        $finder = (new Finder())->in($source);
 
         if (!empty($include)) {
             $finder = $this->addIncludes($finder, $include);
