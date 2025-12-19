@@ -12,6 +12,10 @@ use MkConn\Sfc\Strategies\Copy\DateStrategy\MonthStrategy;
 use MkConn\Sfc\Strategies\Copy\DateStrategy\YearStrategy;
 use MkConn\Sfc\Strategies\Copy\DefaultCopyStrategy;
 use MkConn\Sfc\Strategies\Copy\FileTypeStrategy;
+use Symfony\Component\Mime\MimeTypes;
+use Symfony\Component\Mime\MimeTypesInterface;
+
+use function DI\get;
 
 return [
     AvailableStrategies::class => function (Container $c) {
@@ -25,4 +29,5 @@ return [
 
         return new AvailableStrategies($collection);
     },
+    MimeTypesInterface::class => get(MimeTypes::class),
 ];
