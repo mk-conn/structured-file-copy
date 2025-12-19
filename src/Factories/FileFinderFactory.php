@@ -8,17 +8,17 @@ use MkConn\Sfc\Enums\FilterType;
 use MkConn\Sfc\Models\Filter;
 use MkConn\Sfc\Services\FileService\FileTypes;
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\Mime\MimeTypes;
+use Symfony\Component\Mime\MimeTypesInterface;
 
 readonly class FileFinderFactory {
-    public function __construct(private MimeTypes $mimeTypes) {}
+    public function __construct(private MimeTypesInterface $mimeTypes, private FinderFactory $finderFactory) {}
 
     /**
      * @param array<Filter> $include
      * @param array<Filter> $exclude
      */
     public function create(string $source, array $include = [], array $exclude = []): Finder {
-        $finder = new Finder()->in($source);
+        $finder = $this->finderFactory->create()->in($source);
 
         if (!empty($include)) {
             $finder = $this->addIncludes($finder, $include);
@@ -36,7 +36,7 @@ readonly class FileFinderFactory {
      */
     private function addIncludes(Finder $finder, array $filters): Finder {
         foreach ($filters as $filter) {
-            switch ($filter->filterType->name) {
+            switch ($filter->filterType) {
                 case FilterType::EXT:
                     $finder->name("*.$filter->value");
 
@@ -82,6 +82,8 @@ readonly class FileFinderFactory {
 
                     break;
                 case FilterType::FILE_TYPE:
+                    $finder->notName($this->mapFileTypeToMimeTypeExtensions($filter->value));
+
                     break;
                 case FilterType::DIRECTORY:
                     $finder->exclude($filter->value);
